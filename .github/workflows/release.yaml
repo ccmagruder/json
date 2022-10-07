@@ -5,9 +5,9 @@ permissions:
   contents: write
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - '**'
 
 jobs:
   release:
@@ -29,4 +29,4 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: build/JSON-src.zip
-          tag: ${{ github.ref }}
+          tag: ${{ github.ref_name }}
