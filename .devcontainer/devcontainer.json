@@ -20,4 +20,6 @@
 	"features": {
 		"git": "latest"
 	}
+
+	"extensions": ["twxs.cmake"]
 }
