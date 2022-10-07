@@ -5,9 +5,9 @@ permissions:
   contents: write
 
 on:
-  push:
+  merge:
     branches:
-      - release
+      - main
   pull_request:
     branches:
       - main
