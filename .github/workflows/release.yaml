@@ -30,3 +30,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: build/JSON-src.zip
           tag: ${{ github.ref_name }}
+          overwrite: true
