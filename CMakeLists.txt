@@ -15,9 +15,9 @@ FetchContent_Declare(
 set(BUILD_GMOCK OFF)
 FetchContent_MakeAvailable(GoogleTest)
 
-add_library(JSON SHARED ${CMAKE_SOURCE_DIR}/src/JSON.cpp
-                        ${CMAKE_SOURCE_DIR}/src/Variant.cpp)
-target_include_directories(JSON PUBLIC ${CMAKE_SOURCE_DIR}/include)
+add_library(JSON SHARED src/JSON.cpp
+                        src/Variant.cpp)
+target_include_directories(JSON PUBLIC include)
 
 enable_testing()
 add_subdirectory(tests)
