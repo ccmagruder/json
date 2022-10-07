@@ -1,0 +1,32 @@
+# Copyright 2022 Caleb Magruder
+
+name: Release
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create Build Directory
+        run: cmake -E make_directory build
+      - name: Configure
+        working-directory: build/
+        run: cmake $GITHUB_WORKSPACE
+      - name: Package Source Code
+        working-directory: build
+        run: cmake --build . --target JSON_package
+
+      - name: Release Package
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/JSON-src.zip
+          tag: ${{ github.ref_name }}
