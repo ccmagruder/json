@@ -28,7 +28,8 @@ jobs:
         run: cmake --build . --target JSON_package
 
       - name: Release Package
-        uses: thedoctor0/zip-release@main
+        uses: svenstaro/upload-release-action@v2
         with:
-          type: 'zip'
-          filename: 'JSON-src.zip'
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/JSON-src.zip
+          tag: ${{ github.ref }}
