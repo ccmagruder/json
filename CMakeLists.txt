@@ -11,6 +11,7 @@ add_library(JSON SHARED src/JSON.cpp
                         src/Variant.cpp)
 target_include_directories(JSON PUBLIC include)
 
+# If submodule, skip tests and google test dependency.
 if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
     # Fetch & Build Google Test Depencency
     include(FetchContent)
@@ -22,6 +23,18 @@ if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
     set(BUILD_GMOCK OFF)
     FetchContent_MakeAvailable(GoogleTest)
 
+    # Tests
     enable_testing()
     add_subdirectory(tests)
 endif()
+
+# Build Package
+set(package_files include/ src/ CMakeLists.txt LICENSE)
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-src.zip
+                   COMMAND ${CMAKE_COMMAND} -E
+                     tar c ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-src.zip
+                     --format=zip -- ${package_files}
+                   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                   DEPENDS ${package_files})
+add_custom_target(${PROJECT_NAME}_package
+                  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-src.zip)

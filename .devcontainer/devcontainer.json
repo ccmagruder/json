@@ -19,7 +19,7 @@
 	"remoteUser": "vscode",
 	"features": {
 		"git": "latest"
-	}
+	},
 
 	"extensions": ["twxs.cmake"]
 }
