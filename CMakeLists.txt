@@ -29,7 +29,7 @@ if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
 endif()
 
 # Build Package
-set(package_files include/ src/ CMakeLists.txt LICENSE)
+set(package_files include/ src/ CMakeLists.txt LICENSE VERSION)
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-src.zip
                    COMMAND ${CMAKE_COMMAND} -E
                      tar c ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-src.zip
