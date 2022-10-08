@@ -1,6 +1,6 @@
 # Copyright 2022 Caleb Magruder
 
-name: Release
+name: Release_Package
 permissions:
   contents: write
 
@@ -21,15 +21,15 @@ jobs:
       - name: Create Build Directory
         run: cmake -E make_directory build
 
-      - name: Configure
+      - name: CMake Configure
         working-directory: build/
         run: cmake $GITHUB_WORKSPACE
 
-      - name: Package Source Code
+      - name: CMake Build
         working-directory: build
         run: cmake --build . --target JSON_package
 
-      - name: Create Release
+      - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
         env:
