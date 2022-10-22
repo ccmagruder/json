@@ -6,6 +6,9 @@ project(JSON)
 
 set(CMAKE_CXX_STANDARD 20)
 
+set(CMAKE_CXX_CPPLINT "cpplint;--quiet;--exclude=${CMAKE_BINARY_DIR}/*")
+set(CMAKE_CXX_CPPCHECK "cppcheck;--quiet;--suppress=*:${CMAKE_BINARY_DIR}/*")
+
 # Build JSON Library
 add_library(JSON SHARED src/JSON.cpp
                         src/Variant.cpp)
