@@ -10,8 +10,7 @@ class tJSON : public testing::Test {
 TEST_F(tJSON, EqualityOperator) {
     JSON config("validTypes.json");
 
-    EXPECT_EQ(config["number"], 0.0);
-    EXPECT_NE(config["number"], 1.0);
+    EXPECT_EQ(config["number"], -1.0);
     EXPECT_NE(config["number"], true);
 
     EXPECT_EQ(config["bool"], true);

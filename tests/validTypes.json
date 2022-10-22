@@ -1,5 +1,5 @@
 {
-    "number" : 0,
+    "number" : -1.0,
     "string" : "value",
     "bool" : true,
     "array" : [4,3,16],
