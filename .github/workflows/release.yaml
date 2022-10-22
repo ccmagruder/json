@@ -1,6 +1,6 @@
 # Copyright 2022 Caleb Magruder
 
-name: Release_Package
+name: Release Package
 permissions:
   contents: write
 

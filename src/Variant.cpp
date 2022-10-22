@@ -20,7 +20,7 @@ Variant::Variant(std::string s) {
     } else if (s == "false") {
         _type = BOOL;
         _b = false;
-    } else if (s[0] >= '0' && s[0] <= '9' || s[0] == '.') {
+    } else if (s[0] >= '0' && s[0] <= '9' || s[0] == '.' || s[0] == '-') {
         _type = DOUBLE;
         _d = std::stod(s);
     } else if (s == "null" || s == "NULL") {

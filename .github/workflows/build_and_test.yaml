@@ -1,6 +1,6 @@
 # Copyright 2022 Caleb Magruder
 
-name: Build_and_Test
+name: Build and Test
 
 on:
   pull_request:
