@@ -13,6 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install cpplint
+        run: pip install cpplint
+
       - name: Create Build Directory
         run: cmake -E make_directory build
 
