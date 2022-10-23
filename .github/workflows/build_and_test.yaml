@@ -17,7 +17,7 @@ jobs:
         run: pip install cpplint
 
       - name: Install cppcheck
-        run: brew install cppcheck
+        run: apt-get install cppcheck
 
       - name: Create Build Directory
         run: cmake -E make_directory build
