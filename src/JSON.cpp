@@ -29,12 +29,10 @@ std::string JSON::__load(std::string fileName) {
         index = buffer.find(' ');
     }
 
-    std::clog << buffer;
-
     if (buffer[0] != '{') {
         std::runtime_error("json file must be of the form {...}");
     }
-    std::clog << buffer;
+
     assert(buffer.size() > 0);
     assert(buffer[buffer.size()-1] == '}');
     return buffer;
