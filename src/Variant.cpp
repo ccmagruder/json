@@ -1,4 +1,4 @@
-// Copyright 2022 Caleb Magruder
+// Copyright 2023 Caleb Magruder
 
 #include <iostream>
 #include <map>
@@ -10,14 +10,24 @@
 #define __MAX_ITEMS__ 64
 
 Variant::Variant(std::string s) {
+    // Remove preceding spaces
+    while (s[0] == ' ') {
+        s.erase(0, 1);
+    }
+
+    // Remove postceding spaces
+    while (s[s.size()-1] == ' ') {
+        s.erase(s.size()-1, 1);
+    }
+
     // Detect number in string
     if (s[0] == '[') {
         _type = ARRAY;
         _a = std::make_shared<Array>(s);
-    } else if (s == "true") {
+    } else if (s == "true" || s == "True" || s == "TRUE") {
         _type = BOOL;
         _b = true;
-    } else if (s == "false") {
+    } else if (s == "false" || s == "False" || s == "FALSE") {
         _type = BOOL;
         _b = false;
     } else if (s[0] >= '0' && s[0] <= '9' || s[0] == '.' || s[0] == '-') {
@@ -28,7 +38,7 @@ Variant::Variant(std::string s) {
     } else if (s[0] == '{') {
         _type = OBJECT;
         _o = std::make_shared<Object>(s);
-    } else {
+    } else if (s[0] == '\"') {
         _type = STRING;
         _s = s.substr(1, s.size()-2);
     }
@@ -43,9 +53,15 @@ bool Variant::operator==(const bool b) const {
     if (_type != BOOL) return false;
     return _b == b;
 }
+
 bool Variant::operator==(const double d) const {
     if (_type != DOUBLE) return false;
     return _d == d;
+}
+
+bool Variant::operator==(const int i) const {
+    if (_type != DOUBLE) return false;
+    return _d == static_cast<double>(i);
 }
 
 bool Variant::operator==(const Object& o) const {
@@ -167,132 +183,4 @@ Variant& Variant::operator[](const std::string key) {
 const Variant& Variant::operator[](const std::string key) const {
     assert(_type == Variant::OBJECT);
     return (*_o)[key];
-}
-
-Array::Array(std::string buffer) {
-    buffer.erase(0, 1);  // Remove '['
-    buffer.erase(buffer.size()-1, 1);  // Remove ']'
-
-    size_t ldelim = 0;
-    size_t rdelim;
-    if (buffer.size() == 0)
-        return;
-    for (ptrdiff_t i = 0; i < __MAX_ITEMS__; i++) {
-        rdelim = buffer.find(',', ldelim);
-        std::string value = buffer.substr(ldelim, rdelim-ldelim);
-        list.push_back(Variant(value));
-        if (rdelim == std::string::npos || rdelim + 1 >= buffer.size()) {
-            return;
-        }
-        assert(buffer[rdelim] == ',');
-        ldelim = rdelim+1;
-    }
-
-    std::clog << "readObject stopped reading after 20 pairs";
-}
-
-Array::operator std::string() const {
-    std::ostringstream buffer;
-    buffer << "[";
-    std::vector<Variant>::const_iterator i;
-    for (i = list.begin(); i != list.end(); i++) {
-        if (i != list.begin()) buffer << ",";
-        buffer << *i;
-    }
-    buffer << "]";
-    return buffer.str();
-}
-
-std::ostream& operator << (std::ostream& os, const Array& a) {
-    os << std::string(a);
-    return os;
-}
-
-bool Array::operator==(const Array& other) const {
-    if (list.size() != other.list.size()) return false;
-    std::vector<Variant>::const_iterator j = other.list.begin();
-    std::vector<Variant>::const_iterator i;
-    for (i = list.begin(); i != list.end(); i++) {
-        if (*i != *j) return false;
-        j++;
-    }
-    return true;
-}
-
-Object::Object(std::string buffer) {
-    buffer.erase(0, 1);  // Remove '{'
-    buffer.erase(buffer.size()-1, 1);  // Remove '}'
-
-    if (buffer.size() == 0)
-        return;
-
-    size_t ldelim = 0;
-    size_t rdelim = 0;
-    for (ptrdiff_t i = 0; i < __MAX_ITEMS__; i++) {
-        assert(buffer[ldelim] == '"');  // Check left delim
-
-        rdelim = buffer.find('"', ldelim+1);  // Find right delim
-        assert(buffer[rdelim] == '"');  // Check right delim
-        std::string key = buffer.substr(ldelim+1, rdelim-ldelim-1);
-        assert(buffer[rdelim+1] == ':');  // Check colon
-
-        ldelim = rdelim + 2;
-        // skip ahead to ']' if array
-        if (buffer[ldelim] == '[') {
-            rdelim = buffer.find(']', ldelim);
-        } else if (buffer[ldelim] == '{') {
-            // skip ahead if object
-            rdelim = buffer.find('}', ldelim);
-        }
-        rdelim = buffer.find(",", rdelim);
-
-        map[key] = Variant(buffer.substr(ldelim, rdelim-ldelim));
-        if (rdelim == std::string::npos || rdelim + 1 >= buffer.size()) {
-            return;
-        }
-        assert(buffer[rdelim] == ',');
-        ldelim = rdelim + 1;
-    }
-
-    std::clog << "readObject stopped reading after 20 pairs";
-}
-
-Object::operator std::string() const {
-    std::ostringstream buffer;
-    buffer << *this;
-    return buffer.str();
-}
-
-std::ostream& operator << (std::ostream& os, const Object& obj) {
-    os << "{";
-    std::map<std::string, Variant>::const_iterator i;
-    for (i = obj.map.begin(); i != obj.map.end(); i++) {
-        if (i != obj.map.begin()) os << ",";
-        os << i->first << ":" << i->second;
-    }
-    os << "}";
-    return os;
-}
-
-bool Object::operator==(const Object& other) const {
-    if (map.size() != other.map.size()) return false;
-    std::map<std::string, Variant>::const_iterator j = other.map.begin();
-    std::map<std::string, Variant>::const_iterator i;
-    for (i = map.begin(); i != map.end(); i++) {
-        if (*i != *j) return false;
-        j++;
-    }
-    return true;
-}
-
-bool Object::contains(const std::string& key) const {
-    return map.contains(key);
-}
-
-Variant& Object::operator[](std::string key) {
-    return map[key];
-}
-
-const Variant& Object::operator[](std::string key) const {
-    return map.at(key);
 }
