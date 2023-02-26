@@ -15,14 +15,19 @@ Variant::Variant(std::string s) {
         s.erase(0, 1);
     }
 
+    // Remove postceding spaces
+    while (s[s.size()-1] == ' ') {
+        s.erase(s.size()-1, 1);
+    }
+
     // Detect number in string
     if (s[0] == '[') {
         _type = ARRAY;
         _a = std::make_shared<Array>(s);
-    } else if (s == "true") {
+    } else if (s == "true" || s == "True" || s == "TRUE") {
         _type = BOOL;
         _b = true;
-    } else if (s == "false") {
+    } else if (s == "false" || s == "False" || s == "FALSE") {
         _type = BOOL;
         _b = false;
     } else if (s[0] >= '0' && s[0] <= '9' || s[0] == '.' || s[0] == '-') {
@@ -33,7 +38,7 @@ Variant::Variant(std::string s) {
     } else if (s[0] == '{') {
         _type = OBJECT;
         _o = std::make_shared<Object>(s);
-    } else {
+    } else if (s[0] == '\"') {
         _type = STRING;
         _s = s.substr(1, s.size()-2);
     }
