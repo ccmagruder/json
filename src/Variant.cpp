@@ -181,7 +181,7 @@ Array::Array(std::string buffer) {
         rdelim = buffer.find(',', ldelim);
         std::string value = buffer.substr(ldelim, rdelim-ldelim);
         list.push_back(Variant(value));
-        if (rdelim == std::string::npos) {
+        if (rdelim == std::string::npos || rdelim + 1 >= buffer.size()) {
             return;
         }
         assert(buffer[rdelim] == ',');
@@ -246,9 +246,8 @@ Object::Object(std::string buffer) {
         }
         rdelim = buffer.find(",", rdelim);
 
-        std::string value = buffer.substr(ldelim, rdelim-ldelim);
-        map[key] = Variant(value);
-        if (rdelim == std::string::npos) {
+        map[key] = Variant(buffer.substr(ldelim, rdelim-ldelim));
+        if (rdelim == std::string::npos || rdelim + 1 >= buffer.size()) {
             return;
         }
         assert(buffer[rdelim] == ',');
