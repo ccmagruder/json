@@ -10,6 +10,11 @@
 #define __MAX_ITEMS__ 64
 
 Variant::Variant(std::string s) {
+    // Remove preceding spaces
+    while (s[0] == ' ') {
+        s.erase(0, 1);
+    }
+
     // Detect number in string
     if (s[0] == '[') {
         _type = ARRAY;
@@ -43,9 +48,15 @@ bool Variant::operator==(const bool b) const {
     if (_type != BOOL) return false;
     return _b == b;
 }
+
 bool Variant::operator==(const double d) const {
     if (_type != DOUBLE) return false;
     return _d == d;
+}
+
+bool Variant::operator==(const int i) const {
+    if (_type != DOUBLE) return false;
+    return _d == static_cast<double>(i);
 }
 
 bool Variant::operator==(const Object& o) const {

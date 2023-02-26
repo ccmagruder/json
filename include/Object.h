@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Variant.h"
+
 // Contains object map of variants of different types,
 // lookup by map key
 // Example:
