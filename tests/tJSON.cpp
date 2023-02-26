@@ -4,10 +4,7 @@
 
 #include "JSON.h"
 
-class tJSON : public testing::Test {
-};
-
-TEST_F(tJSON, EqualityOperator) {
+TEST(tJSON, EqualityOperator) {
     JSON config("validTypes.json");
 
     EXPECT_EQ(config["number"], -1.0);
@@ -43,7 +40,7 @@ TEST_F(tJSON, EqualityOperator) {
     std::clog << config << std::endl;
 }
 
-TEST_F(tJSON, Array) {
+TEST(tJSON, Array) {
     Array a("[4,6,7]");
     EXPECT_EQ(a[1], 6.0);
     Array b("[]");
@@ -53,7 +50,7 @@ TEST_F(tJSON, Array) {
     EXPECT_EQ(c[0], 3.14);
 }
 
-TEST_F(tJSON, Object) {
+TEST(tJSON, Object) {
     Object a("{\"a\":4}");
     EXPECT_TRUE(a.contains("a"));
     EXPECT_FALSE(a.contains("b"));
@@ -62,4 +59,15 @@ TEST_F(tJSON, Object) {
     Object b("{}");
     EXPECT_EQ(b.size(), 0);
     EXPECT_FALSE(b.contains("a"));
+}
+
+TEST(tJSON, TerminatingCommas) {
+    Array a("[1,3,]");
+    EXPECT_EQ(a[0], 1.);
+    EXPECT_EQ(a[1], 3.);
+    EXPECT_EQ(a.size(), 2);
+    Object b("{\"a\":4.1,\"b\":false,}");
+    EXPECT_EQ(static_cast<double>(b["a"]), 4.1);
+    EXPECT_EQ(b["b"], false);
+    EXPECT_EQ(b.size(), 2);
 }
