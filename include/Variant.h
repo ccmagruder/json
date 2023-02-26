@@ -81,45 +81,5 @@ class Variant{
         std::string _s;
 };
 
-// Contains array vector of variants of the same type,
-// lookup by integer index
-// Example:
-//    Array a("[4,3.14,1]");
-//    fprintf("a[1] = %1.2e\n",a[1]); /* prints 3.14 */
-class Array{
- public:
-        explicit Array(std::string buffer);
-        explicit operator std::string() const;
-        friend std::ostream& operator << (std::ostream& os, const Array& a);
-        bool operator==(const Array& other) const;
-        Variant& operator[](ptrdiff_t i) {
-            assert(i < list.size());
-            return list[i];
-        }
-        const Variant& operator[](ptrdiff_t i) const {
-            assert(i < list.size());
-            return list[i];
-        }
-        size_t size() { return list.size(); }
- private:
-        std::vector<Variant> list;
-};
-
-// Contains object map of variants of different types,
-// lookup by map key
-// Example:
-//    Objective o("{\"pi\",\"3.14\",\"str\",\"Hello World!\"}");
-//    std::cout << std::string(o["str"]);
-class Object{
- public:
-        explicit Object(std::string buffer);
-        explicit operator std::string() const;
-        friend std::ostream& operator << (std::ostream& os, const Object& obj);
-        bool operator==(const Object& other) const;
-        bool contains(const std::string& key) const;
-        Variant& operator[](std::string key);
-        const Variant& operator[](std::string key) const;
-        size_t size() { return map.size(); }
- protected:
-        std::map<std::string, Variant> map;
-};
+#include "Array.h"
+#include "Object.h"

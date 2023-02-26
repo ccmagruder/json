@@ -13,6 +13,8 @@ endif()
 
 # Build JSON Library
 add_library(JSON SHARED src/JSON.cpp
+                        src/Array.cpp
+                        src/Object.cpp
                         src/Variant.cpp)
 target_include_directories(JSON PUBLIC include)
 
