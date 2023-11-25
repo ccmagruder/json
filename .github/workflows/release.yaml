@@ -18,24 +18,13 @@ jobs:
       - name: Set Version
         run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
 
-      - name: Create Build Directory
-        run: cmake -E make_directory build
-
-      - name: CMake Configure
-        working-directory: build/
-        run: cmake $GITHUB_WORKSPACE
-
-      - name: CMake Build
-        working-directory: build
-        run: cmake --build . --target JSON_package
-
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.VERSION }}
+          tag_name: json-${{ env.VERSION }}
           release_name: Release ${{ env.VERSION }}
           draft: true
           prerelease: true
