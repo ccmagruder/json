@@ -16,3 +16,5 @@ add_library(json SHARED src/JSON.cpp
                         src/Variant.cpp)
 target_include_directories(json PUBLIC include)
 
+install(TARGETS json)
+install(FILES include/JSON.h include/Variant.h DESTINATION include)
