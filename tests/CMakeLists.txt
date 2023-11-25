@@ -1,6 +1,6 @@
 # Copyright 2023 Caleb Magruder
 
-project(JSON)
+project(json)
 
 find_package(GTest REQUIRED)
 
@@ -9,7 +9,7 @@ include(GoogleTest)
 add_executable(tJSON tJSON.cpp)
 
 target_include_directories(tJSON PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(tJSON JSON GTest::gtest GTest::gtest_main)
+target_link_libraries(tJSON json gtest gtest_main)
 
 add_test(NAME tJSON
          WORKING_DIRECTORY tests
